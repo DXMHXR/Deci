@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import org.kimplify.deci.exception.DeciDivisionByZeroException
 import org.kimplify.deci.exception.DeciScaleException
 import org.kimplify.deci.parser.extractScale
+import org.kimplify.deci.parser.toDecimalLiteral
 import org.kimplify.deci.parser.validateAndNormalizeDecimalLiteral
 import platform.Foundation.NSDecimalNumber
 import platform.Foundation.NSDecimalNumberHandler
@@ -24,7 +25,7 @@ actual class Deci private constructor(
 
     actual constructor(value: Long) : this(value.toString())
     actual constructor(value: Int) : this(value.toString())
-    actual constructor(value: Double) : this(value.toString())
+    actual constructor(value: Double) : this(value.toDecimalLiteral())
 
     private fun roundWithHandler(
         value: NSDecimalNumber,

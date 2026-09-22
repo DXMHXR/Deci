@@ -41,7 +41,12 @@ expect class Deci : Comparable<Deci> {
      * `0.1 + 0.2` yields `0.30000000000000004` as a [Double]. Prefer the [String]
      * constructor whenever exact representation is required.
      *
+     * Scientific notation in that representation — which Kotlin uses for magnitudes at or above
+     * `1e7` and below `1e-3` — is expanded before parsing, so `29638000.0` and `0.0001` are
+     * accepted like any other finite value.
+     *
      * @param value the double value.
+     * @throws [org.kimplify.deci.exception.DeciParseException] if [value] is `NaN` or infinite.
      */
     constructor(value: Double)
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- **`Deci(Double)` no longer throws on ordinary magnitudes.** Kotlin renders a
+  `Double` in scientific notation once its magnitude reaches `1e7`, or falls
+  below `1e-3` — `29638000.0` prints as `2.9638E7`. That literal is outside the
+  grammar `DECIMAL_REGEX` accepts, so the `Double` constructor rejected it with
+  `DeciParseException`: every value from ten million up, which for a currency
+  amount is not an edge case. The constructor now expands the exponent before
+  validating, on all six targets. `NaN` and the infinities are still rejected,
+  and the `String` constructor's accepted grammar is unchanged — scientific
+  notation is expanded only on the `Double` path.
+
 ## [0.3.0] - 2026-06-09
 
 ### Changed
