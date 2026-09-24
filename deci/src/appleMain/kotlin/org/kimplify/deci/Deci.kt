@@ -4,6 +4,7 @@ import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.serialization.Serializable
 import org.kimplify.deci.exception.DeciDivisionByZeroException
+import org.kimplify.deci.exception.DeciOverflowException
 import org.kimplify.deci.exception.DeciScaleException
 import org.kimplify.deci.parser.extractScale
 import org.kimplify.deci.parser.toDecimalLiteral
@@ -12,6 +13,17 @@ import platform.Foundation.NSDecimalNumber
 import platform.Foundation.NSDecimalNumberHandler
 import platform.Foundation.NSRoundingMode
 
+private fun parseRepresentableDecimal(value: String): NSDecimalNumber {
+    val normalized = validateAndNormalizeDecimalLiteral(value)
+    val parsed = NSDecimalNumber(normalized)
+    if (parsed.doubleValue.isNaN() ||
+        (normalized.any { it in '1'..'9' } && parsed.compare(NSDecimalNumber.zero) == 0L)
+    ) {
+        throw DeciOverflowException(value)
+    }
+    return parsed
+}
+
 @OptIn(BetaInteropApi::class, ExperimentalForeignApi::class)
 @Serializable(with = DeciSerializer::class)
 actual class Deci private constructor(
@@ -19,7 +31,7 @@ actual class Deci private constructor(
     private val _scale: Int? = null,
 ) : Comparable<Deci> {
     actual constructor(value: String) : this(
-        NSDecimalNumber(validateAndNormalizeDecimalLiteral(value)),
+        parseRepresentableDecimal(value),
         extractScale(validateAndNormalizeDecimalLiteral(value)),
     )
 

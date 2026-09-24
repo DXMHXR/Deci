@@ -41,8 +41,7 @@ class DeciDivisionByZeroException(
 ) : DeciArithmeticException(message, cause)
 
 /**
- * Thrown when a Deci value cannot be converted to a narrower type
- * (e.g. Long) because it exceeds the target type's range.
+ * Thrown when a Deci value cannot be represented by the target type or platform backend.
  *
  * @property value String representation of the Deci that overflowed.
  */

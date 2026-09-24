@@ -16,6 +16,7 @@ expect class Deci : Comparable<Deci> {
      *
      * @param value a string representation of a decimal number (e.g. `"123.45"`, `"-0.001"`).
      * @throws [org.kimplify.deci.exception.DeciParseException] if [value] is not a valid decimal literal.
+     * @throws [org.kimplify.deci.exception.DeciOverflowException] on Apple platforms if [value] is outside the native decimal range.
      */
     constructor(value: String)
 
@@ -47,6 +48,7 @@ expect class Deci : Comparable<Deci> {
      *
      * @param value the double value.
      * @throws [org.kimplify.deci.exception.DeciParseException] if [value] is `NaN` or infinite.
+     * @throws [org.kimplify.deci.exception.DeciOverflowException] on Apple platforms if [value] is outside the native decimal range.
      */
     constructor(value: Double)
 
